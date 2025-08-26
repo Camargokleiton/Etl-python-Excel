@@ -1,16 +1,7 @@
 import pandas as pd
 import streamlit as st
-from src.validator import DataFrameValidator
+from src.model import validate_data
 
-def validate_data(df):
-    results = []
-    for idx, row in df.iterrows():
-        try:
-            record = DataFrameValidator(**row.to_dict())
-            results.append(f"Linha {idx} OK: {record}")
-        except Exception as e:
-            results.append(f"Erro na linha {idx}: {e}")
-    return results
 
 def main():
     st.title("CSV Data Validator")
