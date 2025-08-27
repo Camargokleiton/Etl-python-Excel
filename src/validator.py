@@ -1,4 +1,4 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
 from typing import Optional
 
 class DataFrameValidator(BaseModel):
@@ -14,5 +14,11 @@ class DataFrameValidator(BaseModel):
     Impressions: Optional[float] = Field(None, description="Quantidade de impressões",nullable=True)
     Conversions: Optional[float] = Field(None, description="Número de conversões",nullable=True)
     Segmentacao: Optional[str] = Field(None, alias="Segmentação", description="Tipo de segmentação utilizada",nullable=True)
-    Tipo_de_Anuncio: Optional[str] = Field(None, alias="Tipo_de_Anúncio", description="Formato do anúncio (ex: Estático, Vídeo)",nullable=True)
+    Tipo_de_Anúncio: str = Field(None, alias="Tipo_de_Anúncio", description="Formato do anúncio (ex: Estático, Vídeo)", nullable=True)
     Fase: Optional[str] = Field(None, description="Etapa da campanha (ex: 2º Lançamento | Leads",nullable=True)
+
+    @field_validator("Link_clicks", "Impressions", "Conversions")
+    def must_be_positive(cls, v):
+        if v is not None and v <0:
+            raise ValueError("O valor deve ser maior ou igual à zero")
+        return v

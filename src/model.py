@@ -1,10 +1,11 @@
 import pandas as pd
-from validator import DataFrameValidator
-import streamlit as st
+from src.validator import DataFrameValidator
 
-def validate_data(file):
-    df = pd.read_csv(file)
-    
+
+def validate_data(df):
+
+    df = df.copy()
+
     df.columns = (
         df.columns
         .str.normalize("NFKD")
