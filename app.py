@@ -14,9 +14,9 @@ def main():
         st.write("Data Preview:")
         st.dataframe(df)
 
-        if st.button("Show Data Summary"):
-            st.write("Data Summary:")
-            st.write(df.describe(include='all'))
+        # Botão para baixar todos os dados em JSON
+        
+
         if st.button("Validate"):
             validation_results = validate_data(df)
             st.write("Validation Results:")
@@ -25,8 +25,9 @@ def main():
             warnings = [r for r in validation_results if "Warning" in r]
             oks = [r for r in validation_results if "OK" in r]
 
-            
-
+            st.write(f"Erros: {len(errors)}")
+            st.write(f"Warnings: {len(warnings)}")
+            st.write(f"OK: {len(oks)}")
             for result in errors:
                 st.error(result)
             # for result in warnings:
@@ -34,20 +35,18 @@ def main():
             # for result in oks:
             #     st.success(result)
 
-            
-            if st.button("Salvar apenas linhas validadas (OK)"):
-                ok_indices = [int(r.split()[1]) for r in oks]
-                df_ok = df.iloc[ok_indices]
-                output = io.BytesIO()
-                with pd.ExcelWriter(output, engine='openpyxl') as writer:
-                    df_ok.to_excel(writer, index=False)
-                output.seek(0)
+            if len(errors) == 0:
+                st.success("All rows are valid!")
+                json_data = df.to_json(orient="records", force_ascii=False, indent=2)
                 st.download_button(
-                    label="Download planilha validada",
-                    data=output.getvalue(),
-                    file_name="dados_validados.xlsx",
-                    mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                    label="Download todos os dados em JSON",
+                    data=json_data,
+                    file_name="data.json",
+                    mime="application/json"
                 )
+                st.balloons()
+
+           
 
 if __name__ == "__main__":
     main()
