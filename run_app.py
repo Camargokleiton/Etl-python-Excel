@@ -1,3 +1,12 @@
-import os
+import subprocess
+import sys
+import time
+import webbrowser
 
-os.system("streamlit run app.py")
+# Inicia o Streamlit em background
+proc = subprocess.Popen([
+    sys.executable, "-m", "streamlit", "run", "app.py", "--server.headless=false"
+])
+
+
+proc.wait()
