@@ -30,10 +30,6 @@ def main():
             st.write(f"OK: {len(oks)}")
             for result in errors:
                 st.error(result)
-            # for result in warnings:
-            #     st.warning(result)
-            # for result in oks:
-            #     st.success(result)
 
             if len(errors) == 0:
                 st.success("All rows are valid!")
